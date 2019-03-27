@@ -123,10 +123,10 @@ export default class UI {
       // console.log('column', column)
       // console.log(`cell value: `, this.board[row][column])
 
-      // console.log('this.game.currentState', this.game.currentState)
+      // console.log('%c Status', 'color:red;font-size:16px;', this.game.status)
 
-      // if is an empty cell
-      if (this.board[row][column] === 'E') {
+      // if is an empty cell and its not over the game
+      if (this.game.status === "running" && this.board[row][column] === 'E') {
         this.insertSymbolInCell(element, this.game.currentState.turn);
 
         const nextState = new State(this.game.currentState);

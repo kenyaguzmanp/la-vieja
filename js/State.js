@@ -40,7 +40,7 @@ export default class State {
         return false;
       }
       const isTerminalInX = this.isTerminalInPlayer('X');
-      const isTerminalInO = this.isTerminalInPlayer('0');
+      const isTerminalInO = this.isTerminalInPlayer('O');
 
       if (isTerminalInX) {
         this.status = "ended";

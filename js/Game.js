@@ -14,6 +14,8 @@ export default class Game {
       console.log('_state in advanceTo', _state)
       const isTerminal = _state.isTerminal();
       if (isTerminal) {
+        // Modify game status
+        this.status = "ended"
         console.log(_state.status, _state.result)
       } else {
         if (_state.turn === 'X') {

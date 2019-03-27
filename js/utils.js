@@ -48,3 +48,24 @@ export const getAntiDiagonal = matrix => {
   }
   return antiDiagonal;
 }
+
+/** Function that will create a Matrix with dimension size x size filled with the identifier value
+ * @var {Number} size Row and Column size.
+ * @var {String} identifier value to be filled in every cell of matrix
+ */
+
+export const getGridDataBySize = (size, identifier) => {
+  const grid = [];
+  for (let row = 0; row < size; row++) {
+    let rowArr = [];
+    for (let column = 0; column < size; column++) {
+      if (identifier === undefined) {
+        rowArr.push(column);
+      } else {
+        rowArr.push(identifier);
+      }
+    };
+    grid.push(rowArr);
+  }
+  return grid;
+}

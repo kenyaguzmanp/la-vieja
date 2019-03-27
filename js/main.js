@@ -1,4 +1,6 @@
-// import State from './State.js';
+import State from './State.js';
+
+const GLOBALS = {}
 
 const init = () => {
 	console.log("Ready to play La Vieja?");
@@ -63,9 +65,28 @@ const insertSymbolInCell = (cell, symbol) => {
 const handleGridSizeSubmit = event => {
 	const gridSize = event.target.value;
 	if (gridSize >= 3) {
-		const boardData = getGridDataBySize(gridSize)
+		// Initialize grid with Empty values
+		const boardData = getGridDataBySize(gridSize, 'E')
 		destroyBoardElementsByBoard()
 		buildBoardElementsByBoardArr(boardData)
+
+		const initialState = { board: boardData };
+
+		// const fakeBoard = [['X', 'E', 'E'], ['X', 'E', 'E'], ['X', 'E', 'E']]
+		// const fakeBoard = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+		// const fakeBoard = [['X', 2, 3], [4, 'X', 6], [7, 8, 'X']]
+		// const fakeBoard = [[1, 2, 'X'], [4, 'X', 6], ['X', 8, 9]]
+		// const initialState = { board: fakeBoard };
+
+		GLOBALS.state = new State(initialState);
+
+		console.log('GLOABLS', GLOBALS)
+
+		const emptyCells = GLOBALS.state.getEmptyCellsInBoard();
+		console.log(emptyCells)
+
+		const isTerminal = GLOBALS.state.isTerminal();
+		console.log('is Terminal', isTerminal)
 	}
 
 }

@@ -1,8 +1,11 @@
 import State from './State.js';
+import Game from './Game.js';
 import { getGridDataBySize } from './utils.js'
 
 export default class UI {
   constructor({ boardElement = {}, startButton = {}, gridSizeElement = {}, board = [] }) {
+
+    this.game = {};
 
     this.board = board;
 
@@ -70,8 +73,16 @@ export default class UI {
       console.log('Starting game...')
       this.killEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
 
-      const initialState = { board: this.board };
+
+      // Initial State
+      const initialState = { turn: "X", board: this.board, result: "still running" };
       this.state = new State(initialState);
+
+      // Create Game instance
+      // Initialize Game
+      this.game = new Game({ initialState: this.state });
+      this.game.start();
+
     }
 
     this.handleGridSizeSubmit = event => {
@@ -107,12 +118,28 @@ export default class UI {
       const boardLength = this.board.length
       const row = Number(element.id.replace(/cell-/g, '')) % boardLength;
       const column = Number(element.parentNode.id.replace(/column-/g, '')) % boardLength;
-      console.log('boardLength', boardLength)
-      console.log('row', row)
-      console.log('column', column)
-      // board[row][column] = 'X';
-      // console.log(board)
-      this.insertSymbolInCell(element, 'X')
+      // console.log('boardLength', boardLength)
+      // console.log('row', row)
+      // console.log('column', column)
+      // console.log(`cell value: `, this.board[row][column])
+
+      // console.log('this.game.currentState', this.game.currentState)
+
+      // if is an empty cell
+      if (this.board[row][column] === 'E') {
+        this.insertSymbolInCell(element, this.game.currentState.turn);
+
+        const nextState = new State(this.game.currentState);
+
+        // Mutate board matrix with value of player
+        nextState.board[row][column] = nextState.turn;
+        console.log('Inserting X in UI');
+
+        nextState.advanceTurn();
+        this.game.advanceTo(nextState);
+
+      }
+
     }
 
     this.insertSymbolInCell = (cell, symbol) => {

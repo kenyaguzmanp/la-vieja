@@ -29,30 +29,60 @@ export default class State {
       return indxs;
     };
 
+    this.advanceTurn = () => {
+      // TODO: modify to handle different type of players
+      this.turn = this.turn === "X" ? "O" : "X";
+    };
+
     this.isTerminal = () => {
+      // TODO: Refactor
+      if (this.board.length === 0) {
+        return false;
+      }
+      const isTerminalInX = this.isTerminalInPlayer('X');
+      const isTerminalInO = this.isTerminalInPlayer('0');
+
+      if (isTerminalInX) {
+        this.status = "ended";
+        this.result = `X-won`;
+      } else if (isTerminalInO) {
+        this.status = "ended";
+        this.result = `Y-won`;
+      } else {
+        // TODO: handle this
+        console.log('TIE OR STILL EMPTY');
+      }
+
+      return isTerminalInX || isTerminalInO;
+
+    }
+
+
+    this.isTerminalInPlayer = playerValue => {
+      // playerValue = 'X' o 'O'
 
       const transposeBoard = transpose(this.board);
-      console.log('regular board', this.board)
-      console.log('transpose', transposeBoard)
+      // console.log('regular board', this.board)
+      // console.log('transpose', transposeBoard)
 
       const isTerminalInRow = this.board.some(row => {
-        return row.every(cell => cell === 'X')
+        return row.every(cell => cell === playerValue)
       });
 
       const isTerminalInColumn = transposeBoard.some(row => {
-        return row.every(cell => cell === 'X')
+        return row.every(cell => cell === playerValue)
       });
 
       const diagonal = getDiagonal(this.board);
 
       const antiDiagonal = getAntiDiagonal(this.board);
 
-      const isTerminalInDiagonal = diagonal.every(cell => cell === 'X')
+      const isTerminalInDiagonal = diagonal.every(cell => cell === playerValue)
 
-      const isTerminalInAntiDiagonal = antiDiagonal.every(cell => cell === 'X')
+      const isTerminalInAntiDiagonal = antiDiagonal.every(cell => cell === playerValue)
 
-      console.log('diagonal', diagonal);
-      console.log('anti diagonal', antiDiagonal);
+      // console.log('diagonal', diagonal);
+      // console.log('anti diagonal', antiDiagonal);
 
       return isTerminalInRow || isTerminalInColumn || isTerminalInDiagonal || isTerminalInAntiDiagonal;
     };

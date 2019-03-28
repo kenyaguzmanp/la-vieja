@@ -73,6 +73,10 @@ export default class UI {
       console.log('Starting game...')
       this.killEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
 
+      this.addClassToAllCells('activeCell')
+
+      // Create Click events on Cells
+      this.createEventListenerForCells();
 
       // Initial State
       const initialState = { turn: "X", board: this.board, result: "still running" };
@@ -146,6 +150,31 @@ export default class UI {
       cell.innerHTML = symbol;
     }
 
+    this.createEventListenerForCells = () => {
+      const columns = this.boardElement.childNodes;
+      columns.forEach(cell => {
+        const cells = cell.childNodes;
+        cells.forEach(node => {
+          this.createEventListener(node, "click", this.handleClickCell)
+        })
+      })
+    }
+
+    this.addClassToCell = (cellElement, className) => {
+      cellElement.classList.add(className)
+    }
+
+    this.addClassToAllCells = className => {
+      const columns = this.boardElement.childNodes;
+      columns.forEach(cell => {
+        const cells = cell.childNodes;
+        cells.forEach(node => {
+          this.addClassToCell(node, className)
+        })
+      })
+    }
+
+
     this.buildBoardElements = board => {
       // const boardElement = document.querySelector("#board");
       let count = 0;
@@ -159,7 +188,6 @@ export default class UI {
           let element = document.createElement("div");
           element.className = 'cell';
           element.id = `cell-${count}`;
-          element.addEventListener("click", this.handleClickCell)
           count++;
           columnContainer.appendChild(element);
         }

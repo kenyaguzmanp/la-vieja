@@ -8,6 +8,10 @@
   width: 100px;
   height: 100px;
   margin: 10px;
+  background-color: rgb(238, 104, 104);
+}
+
+.activeCell {
   background-color: red;
 }
 

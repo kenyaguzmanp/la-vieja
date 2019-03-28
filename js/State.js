@@ -32,10 +32,17 @@ export default class State {
       return indxs;
     };
 
+    this.getNextPlayerTurn = prevTurn => {
+      return prevTurn === this.players[0] ? this.players[1] : this.players[0];
+    }
+
     this.advanceTurn = () => {
-      // TODO: modify to handle different type of players
-      // this.turn = this.turn === "X" ? "O" : "X";
-      this.turn = this.turn === this.players[0] ? this.players[1] : this.players[0];
+      // console.log('%c advanceTurn in State', 'background-color:green;color:white;font-size:16px;')
+      console.log('%c prev turn', 'background-color:green;color:white;font-size:16px;', this.turn)
+
+      this.turn = this.getNextPlayerTurn(this.turn)
+
+      console.log('%c next turn', 'background-color:green;color:white;font-size:16px;', this.turn)
     };
 
     this.isTerminal = () => {

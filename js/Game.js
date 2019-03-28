@@ -11,7 +11,9 @@ export default class Game {
 
 
     this.advanceTo = _state => {
-      console.log('_state in advanceTo', _state)
+      // console.log('%c _state in advanceTo', 'color:green;font-size:16px;', _state)
+      // Modify game state
+      this.currentState = _state;
       const isTerminal = _state.isTerminal();
       if (isTerminal) {
         // Modify game status
@@ -24,12 +26,10 @@ export default class Game {
         } else {
           // TODO: call to modify UI
           console.log(`${_state.turn} turn`)
+          this.ai.notify(_state.players[1]);
         }
       }
 
-      // TODO: check
-      // Modify game state
-      this.currentState = _state;
     }
 
     this.start = () => {

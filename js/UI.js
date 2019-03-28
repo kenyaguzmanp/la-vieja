@@ -1,5 +1,6 @@
 import State from './State.js';
 import Game from './Game.js';
+import AI from './AI.js';
 import { getGridDataBySize } from './utils.js'
 
 export default class UI {
@@ -109,9 +110,17 @@ export default class UI {
       const initialState = { turn: this.players[0], board: this.board, result: "still running", players: this.players };
       this.state = new State(initialState);
 
+      // Define Artificial Intelligence
+      // TODO: modfify level of intelligence
+      const aiPlayer = new AI({ level: 'blind' });
+
       // Create Game instance
       // Initialize Game
-      this.game = new Game({ initialState: this.state });
+      this.game = new Game({ autoPlayer: aiPlayer, initialState: this.state });
+      aiPlayer.plays(this.game);
+
+      // console.log('AI', aiPlayer)
+
       this.game.start();
 
     }
@@ -125,21 +134,6 @@ export default class UI {
         this.destroyBoardElementsByBoard()
         this.buildBoardElementsByBoardArr()
 
-        // const fakeBoard = [['X', 'E', 'E'], ['X', 'E', 'E'], ['X', 'E', 'E']]
-        // const fakeBoard = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-        // const fakeBoard = [['X', 2, 3], [4, 'X', 6], [7, 8, 'X']]
-        // const fakeBoard = [[1, 2, 'X'], [4, 'X', 6], ['X', 8, 9]]
-        // const initialState = { board: fakeBoard };
-
-        // GLOBALS.state = new State(initialState);
-
-        // console.log('GLOABLS', GLOBALS)
-
-        // const emptyCells = GLOBALS.state.getEmptyCellsInBoard();
-        // console.log(emptyCells)
-
-        // const isTerminal = GLOBALS.state.isTerminal();
-        // console.log('is Terminal', isTerminal)
       }
     }
 
@@ -149,12 +143,6 @@ export default class UI {
       const boardLength = this.board.length
       const row = Number(element.id.replace(/cell-/g, '')) % boardLength;
       const column = Number(element.parentNode.id.replace(/column-/g, '')) % boardLength;
-      // console.log('boardLength', boardLength)
-      // console.log('row', row)
-      // console.log('column', column)
-      // console.log(`cell value: `, this.board[row][column])
-
-      // console.log('%c Status', 'color:red;font-size:16px;', this.game.status)
 
       // if is an empty cell and its not over the game
       if (this.game.status === "running" && this.board[row][column] === 'E') {

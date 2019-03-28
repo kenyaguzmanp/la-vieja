@@ -3,9 +3,13 @@ import Game from './Game.js';
 import { getGridDataBySize } from './utils.js'
 
 export default class UI {
-  constructor({ boardElement = {}, startButton = {}, gridSizeElement = {}, board = [] }) {
+  constructor({ boardElement = {}, startButton = {}, gridSizeElement = {}, board = [], players = ['X', 'O'] }) {
 
     this.game = {};
+
+    this.playersElements = players;
+
+    this.players = {};
 
     this.board = board;
 
@@ -53,11 +57,29 @@ export default class UI {
       return getGridDataBySize(this.gridSize, identifier)
     }
 
+    this.handleOnChangePlayer = event => {
+      const element = event.target;
+      const index = Number(element.id.replace(/player-/g, ''))
+      const value = element.value;
+      this.players[index] = value;
+      console.log('this.player', this.players)
+    }
+
     this.init = () => {
       console.log("INIT UI")
-      console.log(this.gridSizeElement, this.startButton)
       this.createEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
       this.createEventListener(this.startButton, "click", this.handleClickStart);
+
+      const players = [];
+      this.playersElements.forEach(element => {
+        this.createEventListener(element, "input", this.handleOnChangePlayer);
+        players.push(element.value)
+      })
+
+      this.players = players;
+
+      console.log('players', this.players)
+
     }
 
     this.createEventListener = (element, actionType, callback) => {
@@ -73,13 +95,18 @@ export default class UI {
       console.log('Starting game...')
       this.killEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
 
+      this.playersElements.forEach(element => {
+        this.killEventListener(element, "input", this.handleOnChangePlayer);
+      })
+
+
       this.addClassToAllCells('activeCell')
 
       // Create Click events on Cells
       this.createEventListenerForCells();
 
       // Initial State
-      const initialState = { turn: "X", board: this.board, result: "still running" };
+      const initialState = { turn: this.players[0], board: this.board, result: "still running", players: this.players };
       this.state = new State(initialState);
 
       // Create Game instance

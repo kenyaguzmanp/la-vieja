@@ -5,6 +5,10 @@
 }
 
 .cell {
+  display: flex;
+  font-size: 36px;
+  align-items: center;
+  justify-content: center;
   width: 100px;
   height: 100px;
   margin: 10px;

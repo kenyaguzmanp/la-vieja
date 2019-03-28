@@ -9,10 +9,13 @@ export default class State {
 
     this.result = "still running";
 
+    this.players = ['X', 'O'];
+
     if (old !== undefined) {
       this.board = old.board;
       this.turn = old.turn;
       this.result = old.result;
+      this.players = old.players;
     }
 
 
@@ -31,7 +34,8 @@ export default class State {
 
     this.advanceTurn = () => {
       // TODO: modify to handle different type of players
-      this.turn = this.turn === "X" ? "O" : "X";
+      // this.turn = this.turn === "X" ? "O" : "X";
+      this.turn = this.turn === this.players[0] ? this.players[1] : this.players[0];
     };
 
     this.isTerminal = () => {
@@ -39,21 +43,22 @@ export default class State {
       if (this.board.length === 0) {
         return false;
       }
-      const isTerminalInX = this.isTerminalInPlayer('X');
-      const isTerminalInO = this.isTerminalInPlayer('O');
 
-      if (isTerminalInX) {
-        this.status = "ended";
-        this.result = `X-won`;
-      } else if (isTerminalInO) {
-        this.status = "ended";
-        this.result = `Y-won`;
-      } else {
-        // TODO: handle this
-        console.log('TIE OR STILL EMPTY');
-      }
+      const isTerminalInPlayers = [];
+      this.players.forEach(player => {
+        const isTerminalInPlayer = this.isTerminalInPlayer(player)
+        if (isTerminalInPlayer) {
+          this.status = "ended";
+          this.result = `${player}-won`;
+        }
+        isTerminalInPlayers.push(isTerminalInPlayer);
+      });
 
-      return isTerminalInX || isTerminalInO;
+      const isTerminal = isTerminalInPlayers.some(playerTerminal => playerTerminal === true)
+
+      return isTerminal;
+
+      // return isTerminalInX || isTerminalInO;
 
     }
 

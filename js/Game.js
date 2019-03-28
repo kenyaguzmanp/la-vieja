@@ -18,12 +18,12 @@ export default class Game {
         this.status = "ended"
         console.log(_state.status, _state.result)
       } else {
-        if (_state.turn === 'X') {
+        if (_state.turn === _state.players[0]) {
           // TODO: call to modify UI
-          console.log('X turn')
+          console.log(`${_state.turn} turn`)
         } else {
           // TODO: call to modify UI
-          console.log('0 turn')
+          console.log(`${_state.turn} turn`)
         }
       }
 

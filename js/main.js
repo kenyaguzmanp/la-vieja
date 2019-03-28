@@ -7,6 +7,7 @@ const GLOBALS = {}
 // Immediately-invoked Function Expression (IIFE)
 void function () {
 	const startButton = document.querySelector("#start");
+	const resetButton = document.querySelector("#reset");
 	const gridSizeElement = document.querySelector("#gridSize");
 	const boardElement = document.querySelector("#board");
 
@@ -15,7 +16,7 @@ void function () {
 
 	const players = [player1Element, player2Element];
 
-	const UIModel = new UI({ boardElement, startButton, gridSizeElement, players });
+	const UIModel = new UI({ boardElement, startButton, resetButton, gridSizeElement, players });
 	UIModel.init();
 
 	GLOBALS.UI = UIModel;

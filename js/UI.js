@@ -4,7 +4,7 @@ import AI from './AI.js';
 import { getGridDataBySize } from './utils.js'
 
 export default class UI {
-  constructor({ boardElement = {}, startButton = {}, gridSizeElement = {}, board = [], players = ['X', 'O'] }) {
+  constructor({ boardElement = {}, startButton = {}, resetButton, gridSizeElement = {}, board = [], players = ['X', 'O'] }) {
 
     this.game = {};
 
@@ -21,6 +21,8 @@ export default class UI {
     this.boardElement = boardElement;
 
     this.startButton = startButton;
+
+    this.resetButton = resetButton;
 
     this.gridSizeElement = gridSizeElement;
 
@@ -66,6 +68,25 @@ export default class UI {
       console.log('this.player', this.players)
     }
 
+    this.handleClickReset = event => {
+      // Clean game
+      // TODO: modify
+      this.game = {}
+      this.state = {};
+      this.board = this.generateBoardMatrixByIdentifier('E');
+
+      const cell = document.querySelectorAll(".cell");
+      for (let index = 0; index < cell.length; index++) {
+        const cellElement = cell[index];
+        cellElement.innerHTML = '';
+      }
+
+      this.killEventListenerForCells()
+
+      this.createEventListener(this.startButton, "click", this.handleClickStart);
+
+    }
+
     this.init = () => {
       console.log("INIT UI")
       this.createEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
@@ -91,17 +112,7 @@ export default class UI {
       element.removeEventListener(actionType, callback);
     }
 
-    this.handleClickStart = event => {
-      // console.log(event);
-      console.log('Starting game...')
-      this.killEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
-
-      this.playersElements.forEach(element => {
-        this.killEventListener(element, "input", this.handleOnChangePlayer);
-      })
-
-
-      this.addClassToAllCells('activeCell')
+    this.initGame = () => {
 
       // Create Click events on Cells
       this.createEventListenerForCells();
@@ -122,6 +133,27 @@ export default class UI {
       // console.log('AI', aiPlayer)
 
       this.game.start();
+
+    }
+
+    this.handleClickStart = event => {
+      // console.log(event);
+      console.log('Starting game...')
+      this.killEventListener(this.gridSizeElement, "input", this.handleGridSizeSubmit);
+
+      this.createEventListener(this.resetButton, "click", this.handleClickReset);
+
+      this.playersElements.forEach(element => {
+        this.killEventListener(element, "input", this.handleOnChangePlayer);
+      })
+
+
+      this.addClassToAllCells('activeCell')
+
+      this.initGame();
+
+      // just click once
+      this.killEventListener(this.startButton, "click", this.handleClickStart);
 
     }
 
@@ -171,6 +203,16 @@ export default class UI {
         const cells = cell.childNodes;
         cells.forEach(node => {
           this.createEventListener(node, "click", this.handleClickCell)
+        })
+      })
+    }
+
+    this.killEventListenerForCells = () => {
+      const columns = this.boardElement.childNodes;
+      columns.forEach(cell => {
+        const cells = cell.childNodes;
+        cells.forEach(node => {
+          this.killEventListener(node, "click", this.handleClickCell);
         })
       })
     }

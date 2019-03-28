@@ -56,9 +56,9 @@ export default class AI {
     }
     this.insertAiPlayerInCell = (cell, turn) => {
       const { row, column } = cell;
-      const selectedCell = document.querySelector(`#column-${column}`);
+      const selectedColumn = document.querySelector(`#column-${column}`);
       const selectedRowId = `cell-${row}`;
-      const nodes = selectedCell.childNodes;
+      const nodes = selectedColumn.childNodes;
       let cellElem = {};
       nodes.forEach((node, index) => {
         const id = `cell-${index}`

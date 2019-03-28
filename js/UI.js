@@ -25,10 +25,10 @@ export default class UI {
     this.gridSizeElement = gridSizeElement;
 
     this.destroyBoardElementsByBoard = () => {
-      const cells = document.querySelectorAll(".cell");
-      if (cells.length > 0) {
-        for (let index = 0; index < cells.length; index++) {
-          cells[index].parentNode.removeChild(cells[index]);
+      const columns = document.querySelectorAll(".columnContainer");
+      if (columns.length > 0) {
+        for (let index = 0; index < columns.length; index++) {
+          columns[index].parentElement.removeChild(columns[index]);
         }
       }
     }
